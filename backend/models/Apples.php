@@ -2,8 +2,9 @@
 
 namespace backend\models;
 
-use Yii;
 use yii\db\ActiveRecord;
+use yii\db\StaleObjectException;
+use Throwable;
 
 /**
  * This is the model class for table "apples".
@@ -74,5 +75,49 @@ class Apples extends ActiveRecord
     public function getStatus()
     {
         return $this->hasOne(Status::className(), ['id' => 'status_id']);
+    }
+
+    // Будет съедено на процент %
+    public function EatApple($percent)
+    {
+        $health = $this->health;
+        $this->health = $health - ($health / 100 * $percent);
+        $this->save();
+
+    }
+
+    // Падает на землю
+    public function FallToGround()
+    {
+        $status = Status::find()->where(['name' => 'Упавшее'])->one();
+        $this->status = $status->id;
+        $this->fallen = time();
+        $this->save();
+    }
+
+    // Возвращает статус - на дереве висит или нет
+    public function OnTree()
+    {
+        $status = Status::find()->where(['name' => 'Висит на дереве'])->one();
+        if ($this->status === $status->name) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // Удаление яблока из базы когда съедено
+    public function DeleteApple()
+    {
+        if ($this->health === 0) {
+            try {
+                $this->delete();
+            } catch (StaleObjectException $e) {
+            } catch (Throwable $e) {
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 }
