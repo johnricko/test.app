@@ -1,53 +1,39 @@
 <?php
 
+use yii\helpers\Html;
 /* @var $this yii\web\View */
 
-$this->title = 'My Yii Application';
+$this->title = 'Apple test application';
 ?>
 <div class="site-index">
+    <div class="col-md-12">
+        <? if (!empty($models)) { ?>
+            <? $formatter = Yii::$app->formatter; ?>
+            <? foreach ($models as $model) { ?>
 
-    <div class="jumbotron">
-        <h1>Congratulations!</h1>
+                <?php
+                // Выбираем цвет для яблока
+                switch ($model->color->name) {
+                    case 'Зеленое':
+                        $color = 'text-success';
+                        break;
+                    case 'Желтое':
+                        $color = 'text-warning';
+                        break;
+                    case 'Красное':
+                        $color = 'text-danger';
+                        break;
+                }
+                ?>
 
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
-    </div>
-
-    <div class="body-content">
-
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
+                <div class="well col-md-4">
+                    <?= Html::tag('div', 'ID: ' . $model->id, ['class' => 'text-success']); ?>
+                    <?= Html::tag('div', $model->health, ['class' => 'glyphicon glyphicon-heart text-danger']) ?>
+                    <?= Html::tag('div', Html::tag('span', '', ['class' => 'glyphicon glyphicon-apple']) . $model->color->name, ['class' => $color]) ?>
+                    <?= Html::tag('div', 'Время появления: ' . $formatter->asRelativeTime($model->created), ['class' => 'text-warning']) ?>
+                    <?= Html::tag('div', $model->fallen === null ? 'Не упало еще' : 'Уже упало', ['class' => 'text-info']) ?>
             </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
-            </div>
-        </div>
-
+            <? } ?>
+        <? } ?>
     </div>
 </div>

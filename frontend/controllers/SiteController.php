@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use backend\models\Apples;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
@@ -74,7 +75,20 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        // Выводим яблоки в базе и кнопки управления
+        //$model = new Apples();
+        $models = Apples::find()->all();
+
+        return $this->render('index', [
+            'models' => $models
+
+        ]);
+    }
+
+    public function actionCreate()
+    {
+        $model = new Apples();
+        $model->createApples();
     }
 
     /**
